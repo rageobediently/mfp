@@ -1,22 +1,42 @@
 import re
+from mypyprog.classes import *
 
-from classes import *
+#from mypyprog.classes import Measminimizes
 
 
-def processing_add2(msrm_m,xyz):
-    i = 0
-    min = abs(xyz - msrm_m[0])
-    k = 0
-    while i < len(msrm_m):
-        if abs(xyz - msrm_m[i].x) < min:
-            min = abs(xyz - msrm_m[i].x)
-            k = msrm_m[i].x
-    return k
+
 
 def processing_add(msrm,msrm_m,x,y=0.0,z=0.0):
-    razn_x = processing_add2(msrm_m,x)
-    razn_y = processing_add2(msrm_m,y)
-    razn_z = processing_add2(msrm_m,z)
+    razn_x = 0
+    i = 0
+    min = abs(x - msrm_m[0].x)
+    razn_x = msrm_m[0].x
+    while i < len(msrm_m):
+        if abs(x - msrm_m[i].x) < min:
+            min = abs(x - msrm_m[i].x)
+            razn_x = msrm_m[i].x
+        i += 1
+
+    razn_y = 0
+    i = 0
+    min = abs(y - msrm_m[0].y)
+    razn_y = msrm_m[0].y
+    while i < len(msrm_m):
+        if abs(y - msrm_m[i].y) < min:
+            min = abs(y - msrm_m[i].y)
+            razn_y = msrm_m[i].y
+        i += 1
+
+    razn_z = 0
+    i = 0
+    min = abs(z - msrm_m[0].z)
+    razn_z = msrm_m[0].z
+    while i < len(msrm_m):
+        if abs(z - msrm_m[i].z) < min:
+            min = abs(z - msrm_m[i].z)
+            razn_z = msrm_m[i].z
+        i += 1
+
     fin = []
     i = 0
     while i < len(msrm):
@@ -24,8 +44,7 @@ def processing_add(msrm,msrm_m,x,y=0.0,z=0.0):
             fin.append(x - msrm[i].dx)
             fin.append(y - msrm[i].dy)
             fin.append(z - msrm[i].dz)
-
-
+        i+=1
     return fin
 
 def meas_minimize(meas):
@@ -64,11 +83,10 @@ def meas_minimize(meas):
 
     i = 0
     while i < len(mass_x):
-        prom = meas_minimizes()
-        prom.x = mass_x[i]
-        prom.y = mass_y[i]
-        prom.z = mass_z[i]
+        prom = Measminimizes()
+        prom.ww(mass_x[i],mass_y[i],mass_z[i])
         arr_minimize.append(prom)
+        i += 1
     return arr_minimize
 
 
@@ -121,6 +139,7 @@ def types(el):
         book = ["X","Y","Z"]
         while i < len(el):
             strg = strg + " " + book[i] + convert(el[i])
+            i += 1
         return strg[1:]
 
 

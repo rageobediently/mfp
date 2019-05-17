@@ -18,8 +18,15 @@ class Pogresh:
         #print(self.x + " " + self.y + " " + self.z + " " + self.dx + " " + self.dy + " " + self.dz)
         print(self.x,self.y,self.z,self.dx,self.dy,self.dz)
 
-class meas_minimizes:
+class Measminimizes:
     x = 0.0
     y = 0.0
     z = 0.0
+
+    def ww(self,x,y,z):
+        self.x = x
+        self.y = y
+        self.z = z
+        return 0
+
 
