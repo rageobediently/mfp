@@ -17,15 +17,16 @@ def processing_add(msrm,msrm_m,x,y=0.0,z=0.0):
     razn_x = processing_add2(msrm_m,x)
     razn_y = processing_add2(msrm_m,y)
     razn_z = processing_add2(msrm_m,z)
+    fin = []
     i = 0
     while i < len(msrm):
         if razn_x == msrm[i].x and razn_y == msrm[i].y and razn_z == msrm[i].z:
-            x -= msrm[i].dx
-            y -= msrm[i].dy
-            z -= msrm[i].dz
+            fin.append(x - msrm[i].dx)
+            fin.append(y - msrm[i].dy)
+            fin.append(z - msrm[i].dz)
 
 
-    return 0
+    return fin
 
 def meas_minimize(meas):
     arr_minimize = []
@@ -34,7 +35,7 @@ def meas_minimize(meas):
     mass_x = []
     mass_x.append(meas[0].x)
     while i < len(meas):
-        if mass_x[j] > meas[i]:
+        if mass_x[j] > meas[i].x:
             mass_x.append(meas[i].x)
             j += 1
         i += 1
@@ -45,7 +46,7 @@ def meas_minimize(meas):
     while i < len(meas):
         if meas[i].y == mass_y[0]:
             break
-        if mass_y[j] > meas[i]:
+        if mass_y[j] > meas[i].y:
             mass_y.append(meas[i].y)
             j += 1
         i += 1
@@ -56,27 +57,32 @@ def meas_minimize(meas):
     while i < len(meas):
         if meas[i].z == mass_z[0]:
             break
-        if mass_z[j] > meas[i]:
+        if mass_z[j] > meas[i].z:
             mass_z.append(meas[i].z)
             j += 1
         i += 1
 
     i = 0
     while i < len(mass_x):
-        prom = classes.meas_minimize()
+        prom = meas_minimizes()
         prom.x = mass_x[i]
         prom.y = mass_y[i]
         prom.z = mass_z[i]
-        arr_minimize[i].append(prom)
+        arr_minimize.append(prom)
     return arr_minimize
 
 
 def processing(strg, msrm,msrm_m):
     if type(strg) is float or int:
-        return processing_add(msrm,msrm_m,strg)
+        tx = processing_add(msrm,msrm_m,strg)
+        return tx[0]
     else:
         if len(strg) == 2:
-            return processing_add(msrm,msrm_m,strg[0],strg[1])
+            ty = processing_add(msrm,msrm_m,strg[0],strg[1])
+            ty1 = []
+            ty1.append(ty[0])
+            ty1.append(ty[1])
+            return ty1
         elif len(strg) == 3:
             return processing_add(msrm,msrm_m,strg[0],strg[1],strg[2])
 def write(data_ish,data_obr):
@@ -85,21 +91,6 @@ def write(data_ish,data_obr):
         return "G53 " + data_obr
     elif data_ish.startwith("G91"):
         return "G91 " + data_obr
-
-def per_write(data_ish,data_obr):
-    if type(data_obr) is str:
-        return write(data_ish,data_obr)
-    else:
-
-def types(el):
-    if type(el) is float or int:
-        return convert(el)
-    else:
-        i = 0
-        while i < len(el):
-            el[i] = convert(el[i])
-        return el
-
 
 def convert_second(strg,k):
     strg = strg[k::]
@@ -120,6 +111,17 @@ def convert(fl):
         return convert_second(strg,1)
     else:
         return convert_second(strg,0)
+
+def types(el):
+    if type(el) is float or int:
+        return "X" + convert(el)
+    else:
+        i = 0
+        strg = str()
+        book = ["X","Y","Z"]
+        while i < len(el):
+            strg = strg + " " + book[i] + convert(el[i])
+        return strg[1:]
 
 
 def otdel(lin):
@@ -164,8 +166,8 @@ def gcord(str):
     for line in str:
         if line.startswith("G53") or line.startswith("G91"):
             nt = processing(kol(otdel(line)),msrm,msrm_m)
-
-            write (line,nt)
+            line = write (line,types(nt))
+            print(line)
 
 
 def meas_open():
@@ -184,7 +186,7 @@ def meas_open():
     i = 0
     pl_obr = []
     while i < len(pl):
-        av = classes.Pogresh()
+        av = Pogresh()
         av.opr(pl[i].split("\t"))
         pl_obr.append(av)
         # pl_obr[i].prints()
@@ -192,7 +194,7 @@ def meas_open():
     return pl_obr
 
 
-with open('g.txt','rw') as fg:
+with open('g.txt','r') as fg:
     #g = fg.read()
     gcord(fg)
 

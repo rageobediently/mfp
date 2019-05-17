@@ -18,7 +18,7 @@ class Pogresh:
         #print(self.x + " " + self.y + " " + self.z + " " + self.dx + " " + self.dy + " " + self.dz)
         print(self.x,self.y,self.z,self.dx,self.dy,self.dz)
 
-class meas_minimize:
+class meas_minimizes:
     x = 0.0
     y = 0.0
     z = 0.0
