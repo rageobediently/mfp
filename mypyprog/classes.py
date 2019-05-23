@@ -28,5 +28,6 @@ class Measminimizes:
         self.y = y
         self.z = z
         return 0
-
+    def prints(self):
+        print(self.x, self.y, self.z)
 
